@@ -24,7 +24,7 @@ class CreateProJectManagement
         // Replace title placeholder
         add_filter('enter_title_here', [$this, 'custom_enter_title_here'], 10, 2);
 
-        require_once PROJECT_MANAGEMENT_PATH . '/features/class-replace-author-box.php';
+        // require_once PROJECT_MANAGEMENT_PATH . '/features/class-replace-author-box.php';
         require_once PROJECT_MANAGEMENT_PATH . '/features/class-project-management-metabox.php';
         require_once PROJECT_MANAGEMENT_PATH . '/features/class-members-metabox.php';
 
@@ -88,24 +88,25 @@ class CreateProJectManagement
 
 
     /**
-     * Validate player form data. Check if user filled squad number, nationality and suburbs
+     * Validate project form data. Check if user filled squad number, nationality and suburbs
      */
     public function validateProjectData()
     {
-        /** Don't check if delete player */
+        /** Don't check if delete project */
         if (isset($_GET['action']) && $_GET['action'] == 'trash') {
             return;
         }
+
         $errors = [];
 
-        if (!isset($_POST['pj_start_date']) || $_POST['pj_start_date'] == '') {
+        if (!isset($_POST['start_date']) || $_POST['start_date'] == '') {
             $errors[] = 'Start Date is required';
         }
-        if (!isset($_POST['pj_end_date']) || $_POST['pj_end_date'] == '') {
-            $errors[] = 'End Date is required';
+        if (!isset($_POST['estimize']) || $_POST['estimize'] == '') {
+            $errors[] = 'Estimize is required';
         }
-        if (!isset($_POST['title']) || $_POST['title'] == '') {
-            $errors[] = 'Title is required';
+        if (!isset($_POST['members']) || $_POST['members'] == '') {
+            $errors[] = 'Members is required';
         }
 
         /** If have error */

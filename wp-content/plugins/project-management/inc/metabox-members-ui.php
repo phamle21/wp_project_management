@@ -1,6 +1,8 @@
 <?php
 $members = (array) get_post_meta($post->ID, '_members', true);
 $members_details = (array) get_post_meta($post->ID, '_members_details', true);
+
+
 ?>
 
 <!-- Link CSS của DataTables -->
@@ -59,9 +61,9 @@ $members_details = (array) get_post_meta($post->ID, '_members_details', true);
                     $user = get_user_by('id', $member['member_id']);
 
                     // Lấy đường dẫn hình ảnh (thumbnail) của user
-                    $user_thumbnail_url = get_avatar_url($member['id'], array('size' => 'thumbnail'));
+                    $user_thumbnail_url = get_avatar_url($member['member_id'], array('size' => 'thumbnail'));
                     ?>
-                    <input type="hidden" name="member_id">
+                    <input type="hidden" name="member_id[]">
                     <tr>
                         <td>
                             <img src="<?= esc_attr($user_thumbnail_url) ?>" />
@@ -70,10 +72,10 @@ $members_details = (array) get_post_meta($post->ID, '_members_details', true);
                             <?= esc($member['member_name']) ?>
                         </td>
                         <td>
-                            <input type="text" value="<?= esc($member['member_position']) ?>" name="member_position">
+                            <input type="text" value="<?= esc($member['member_position']) ?>" name="member_position[]">
                         </td>
                         <td>
-                            <input type="text" value="<?= esc($member['member_level']) ?>" name="member_level">
+                            <input type="text" value="<?= esc($member['member_level']) ?>" name="member_level[]">
                         </td>
                     </tr>
                 <?php endif; ?>

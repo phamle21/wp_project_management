@@ -6,7 +6,7 @@ class CreateProJectManagementMetaBox extends CreateProJectManagement
     {
         // Add meta box project information 
         add_action('add_meta_boxes', [$this, 'custom_project_metabox']);
-        add_action('save_post', [$this, 'save_custom_project_metabox']);
+        add_action('save_post', [$this, 'save_custom_project_metabox'], 20);
     }
 
     /**************************************************
@@ -39,9 +39,11 @@ class CreateProJectManagementMetaBox extends CreateProJectManagement
     function save_custom_project_metabox($post_id)
     {
         // Kiểm tra nonce để bảo vệ form
-        if (!isset($_POST['custom_post_metabox_nonce']) || !wp_verify_nonce($_POST['custom_post_metabox_nonce'], 'custom_post_metabox')) {
-            return;
-        } // Kiểm tra quyền hạn của user
+        // if (!isset($_POST['custom_post_metabox_nonce']) || !wp_verify_nonce($_POST['custom_post_metabox_nonce'], 'custom_project_metabox')) {
+        //     return;
+        // } 
+
+        // Kiểm tra quyền hạn của user
         if (!current_user_can('edit_post', $post_id)) {
             return;
         }
@@ -69,6 +71,22 @@ class CreateProJectManagementMetaBox extends CreateProJectManagement
         // Lưu giá trị của trường members
         if (isset($_POST['members'])) {
             update_post_meta($post_id, '_members', array_map('intval', $_POST['members']));
+            $arr_members_details = [];
+            foreach ($_POST['members'] as $member_id) {
+                $arr_members_details[] = [
+                    'member_id' => $member_id,
+                    'member_position' => '',
+                    'member_level' => '',
+                ];
+            }
+            update_post_meta($post_id, '_members_details', array_map('string', $arr_members_details));
+            
+            echo '<pre>';
+            var_dump(get_post_meta($post_id, '_members_details', true));
+            echo '</pre>';
+
+            exit();
+
         }
     }
 /**************************************************

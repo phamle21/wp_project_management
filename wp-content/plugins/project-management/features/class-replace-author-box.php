@@ -7,7 +7,7 @@ class ReplaceAuthorBox extends CreateProJectManagement
         // Replace box author
         add_action('admin_menu', [$this, 'remove_custom_post_author_metabox']);
         add_action('add_meta_boxes', [$this, 'add_custom_post_author_metabox']);
-        add_action('save_post', [$this, 'save_custom_post_author_meta_box_data']);
+        add_action('save_post', [$this, 'save_custom_post_author_meta_box_data'], 10);
     }
 
     /**************************************************
@@ -32,7 +32,6 @@ class ReplaceAuthorBox extends CreateProJectManagement
     }
     function custom_post_author_meta_box_callback($post)
     {
-        wp_nonce_field(basename(__FILE__), 'custom_post_author_nonce');
         $authors = get_users(
             array(
                 'who' => 'authors'
@@ -65,24 +64,22 @@ class ReplaceAuthorBox extends CreateProJectManagement
 
     function save_custom_post_author_meta_box_data($post_id)
     {
-        if (!isset($_POST['custom_post_author_nonce'])) {
-            return;
-        }
-        if (!wp_verify_nonce($_POST['custom_post_author_nonce'], basename(__FILE__))) {
-            return;
-        }
+
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
+
         if (isset($_POST['post_author']) && $_POST['post_author']) {
             $new_author_id = sanitize_text_field($_POST['post_author']);
             if ($new_author_id) {
+                // Update the post with the new author ID
                 wp_update_post(
                     array(
                         'ID' => $post_id,
                         'post_author' => $new_author_id
                     )
                 );
+
             }
         }
     }

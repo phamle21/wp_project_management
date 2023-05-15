@@ -4,13 +4,15 @@ jQuery(document).ready(function ($) {
         var postTitle = $('#title').val();
         var startDate = $('#start_date').val();
         var estimize = $('#estimize').val();
+        var members = $('#members').val();
 
         var check = true;
+        $('.notice').remove();
 
         if (postTitle == '') {
 
             if (!$('#notice-error-title').length) {
-                var errorText = 'Invalid project name';
+                var errorText = 'Invalid Project name';
                 var errorHtml = '<div id="notice-error-title" class="notice notice-error is-dismissible"><p>' + errorText + '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
                 $('#wpbody-content .wrap .wp-header-end').after(errorHtml);
 
@@ -44,6 +46,22 @@ jQuery(document).ready(function ($) {
             if (!$('#notice-error-estimize').length) {
                 var errorText = 'Invalid Estimize';
                 var errorHtml = '<div id="notice-error-estimize" class="notice notice-error is-dismissible"><p>' + errorText + '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
+                $('#wpbody-content .wrap .wp-header-end').after(errorHtml);
+
+            }
+
+            // Add this code to handle notice-dismiss button click
+            $('.notice-dismiss').click(function () {
+                $(this).parent().remove(); // Remove the notice element
+            });
+
+            check = false;
+        }
+
+        if (members == '') {
+            if (!$('#notice-error-members').length) {
+                var errorText = 'Invalid Members';
+                var errorHtml = '<div id="notice-error-members" class="notice notice-error is-dismissible"><p>' + errorText + '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
                 $('#wpbody-content .wrap .wp-header-end').after(errorHtml);
 
             }

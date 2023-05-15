@@ -6,7 +6,7 @@ class CreateMembersMetaBox extends CreateProJectManagement
     {
         // Add meta box members
         add_action('add_meta_boxes', [$this, 'custom_members_metabox']);
-        add_action('save_post', [$this, 'save_custom_members_metabox']);
+        add_action('save_post', [$this, 'save_custom_members_metabox'], 30);
     }
 
     /**************************************************
@@ -38,13 +38,17 @@ class CreateMembersMetaBox extends CreateProJectManagement
     // Lưu giá trị của các trường trong metabox khi lưu post
     function save_custom_members_metabox($post_id)
     {
-        // Kiểm tra nonce để bảo vệ form
-        if (!isset($_POST['custom_post_metabox_nonce']) || !wp_verify_nonce($_POST['custom_post_metabox_nonce'], 'custom_post_metabox')) {
-            return;
-
-        } // Kiểm tra quyền hạn của user
+        // Kiểm tra quyền hạn của user
         if (!current_user_can('edit_post', $post_id)) {
             return;
+        }
+        
+        if (isset($_POST['member_position'])) {
+            update_post_meta($post_id, '_members', array_map('intval', $_POST['members']));
+        }
+
+        if (isset($_POST['member_level'])) {
+            update_post_meta($post_id, '_members', array_map('intval', $_POST['members']));
         }
     }
 /**************************************************
